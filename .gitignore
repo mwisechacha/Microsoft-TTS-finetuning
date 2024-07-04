@@ -1,0 +1,11 @@
+# virtual env
+venv
+env
+
+# data
+*.xlsx
+*.csv
+
+# video and voice folders
+/Video/
+/Voices/
