@@ -1,6 +1,7 @@
 # converting mp4 videos to .wav format using moviepy library
 from moviepy.editor import VideoFileClip
 import pandas as pd
+import speech_recognition as sr
 import os
 
 # def mp3_to_wav(video_path, output_path):
@@ -66,3 +67,21 @@ def insert_wav_path(excel_path, wav_files):
 insert_wav_path('Video_dataset.xlsx', wav_files)
 
 
+def generate_transcript(excel_path):
+    df = pd.read_excel(excel_path)
+    r = sr.Recognizer()
+    for index, row in df.iterrows():
+        if pd.isnull(row['text']):
+            audio_path = row['.wav location']
+            with sr.AudioFile(audio_path) as source:
+                audio = r.record(source)
+                try:
+                    text = r.recognize_google(audio)
+                    df.loc[index, 'text'] = text
+                except sr.UnknownValueError:
+                    print('Google Speech Recognition could not understand the audio')
+                except sr.RequestError as e:
+                    print('Could not request results from Google Speech Recognition service; {0}'.format(e))
+    df.to_excel(excel_path, index=False)
+
+generate_transcript('transcripts.xlsx')
