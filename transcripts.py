@@ -32,21 +32,36 @@ def insert_wav_path_and_transcribe(excel_path, wav_files, assemblyai_api_key):
 
         wav = df.iloc[i]
 
-        #check if the record has not  been transcribed
-        if isinstance(wav['text'],str):
-            if wav['text'] in x:
-                # Transcribe the audio file
-                print("Transcribing")
-                wav['text'] = transcribe_audio(wav[".wav location"], assemblyai_api_key)
-            else:
-                print("transcribed")
-        if isinstance(wav['text'],float):
-            if np.isnan(wav['text']):
-                print("Transcribing")
-                transcribe_audio(wav[".wav location"], assemblyai_api_key)
-            else:
-                wav['text'] = transcribe_audio(wav[".wav location"], assemblyai_api_key)
-
+        try:
+            #check if the record has not  been transcribed
+            if isinstance(wav['text'],str):
+                if wav['text'] in x:
+                    # Verify file path
+                    file_path = wav[".wav location"]
+                    print(f"Chcking file path: {file_path}")
+                    if os.path.exists(file_path):
+                        print("File exists. Transcribing")
+                        transcription = transcribe_audio(wav[".wav location"], assemblyai_api_key)
+                        df.at[i, 'text'] = transcription if transcription else wav['text']
+                    else:
+                        print(f"File does not exist: {file_path}")
+                else:
+                    print("Already transcribed")
+            if isinstance(wav['text'], float):
+                if np.isnan(wav['text']):
+                    # verify file path
+                    file_path = wav[".wav location"]
+                    print(f"Checking file path: {file_path}")
+                    if os.path.exists(file_path):
+                        print("File exists. Transcribing")
+                        transcription = transcribe_audio(file_path, assemblyai_api_key)
+                        df.at[i, 'text'] = transcription if transcription else wav['text']
+                    else:
+                        print(f"File does not exist: {file_path}")
+        
+        except Exception as e:
+            print(e)
+            continue
 
     df.to_csv("./dataset.csv", index=False)
 
