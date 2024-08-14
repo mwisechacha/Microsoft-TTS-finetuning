@@ -5,3 +5,4 @@ pandas
 transformers[torch]
 sentencepiece
 streamlit
+torchaudio
