@@ -1,6 +1,7 @@
 from transformers import SpeechT5ForTextToSpeech, SpeechT5HifiGan, AutoProcessor
 import torch
 import torchaudio
+import soundfile as sf
 import streamlit as st
 
 processor = AutoProcessor.from_pretrained("microsoft/speecht5_tts")
@@ -146,10 +147,10 @@ def main():
             audio = audio.unsqueeze(0)
 
         audio_path = "output.wav"
-        torchaudio.save(audio_path, audio, 16000)
+        sf.write(audio_path, audio.numpy(), 16000)
 
         st.audio(audio_path)
-        
+
         st.markdown('<div class="voice-indicator">Generated with Irene Kiwia\'s Voice</div>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
