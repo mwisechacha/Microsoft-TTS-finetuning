@@ -146,11 +146,21 @@ def main():
         if audio.dim() == 1:
             audio = audio.unsqueeze(0)
 
+        audio_np = audio.numpy()
+        print(audio_np.shape)
+        print(audio_np.dtype)
+
         audio_path = "output.wav"
-        sf.write(audio_path, audio.numpy(), 16000)
+        
+        try:
+            # Save audio using soundfile
+            sf.write(audio_path, audio_np.T, 16000)  # Transpose if needed for shape compatibility
+        except Exception as e:
+            st.error(f"Error saving audio: {e}")
+            return
 
-        st.audio(audio_path)
-
+        st.audio(audio_path, format="audio/wav")
+        
         st.markdown('<div class="voice-indicator">Generated with Irene Kiwia\'s Voice</div>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
