@@ -6,3 +6,4 @@ transformers[torch]
 sentencepiece
 streamlit
 torchaudio
+soundfile
