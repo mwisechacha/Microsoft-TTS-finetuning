@@ -113,19 +113,6 @@ def main():
         background: linear-gradient(to right, green, yellow);
     }
 
-    .audio-container {
-        background: linear-gradient(to right, yellow, green);
-        padding: 10px;
-        border-radius: 10px;
-        text-align: center;
-        margin-top: 10px;
-    }
-
-    .audio-container audio {
-        border-radius: 10px;
-        width: 100%;
-    }
-
     .voice-indicator {
         font-size: 1.2em;
         color: #333;
