@@ -153,8 +153,7 @@ def main():
         audio_path = "output.wav"
         
         try:
-            # Save audio using soundfile
-            sf.write(audio_path, audio_np.T, 16000)  # Transpose if needed for shape compatibility
+            sf.write(audio_path, audio_np.T, 16000) 
         except Exception as e:
             st.error(f"Error saving audio: {e}")
             return
